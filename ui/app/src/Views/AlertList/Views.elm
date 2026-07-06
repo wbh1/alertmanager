@@ -108,23 +108,13 @@ defaultAlertGroups activeId activeGroups expandAll groups =
             alertGroup activeId (Set.singleton 0) receiver labels_ (Dict.toList routeLabels) alerts 0 expandAll
 
         _ ->
-            Html.Keyed.node "div"
-                [ class "pl-5" ]
+            div [ class "pl-5" ]
                 (List.indexedMap
                     (\index group ->
-                        ( groupKey group
-                        , alertGroup activeId activeGroups group.receiver (Dict.toList group.labels) (Dict.toList group.routeLabels) group.alerts index expandAll
-                        )
+                        alertGroup activeId activeGroups group.receiver (Dict.toList group.labels) (Dict.toList group.routeLabels) group.alerts index expandAll
                     )
                     groups
                 )
-
-
-groupKey : AlertGroup -> String
-groupKey group =
-    group.receiver.name
-        ++ ":"
-        ++ String.join "," (List.map (\( key, value ) -> key ++ "=" ++ value) (Dict.toList group.labels))
 
 
 alertGroup : Maybe String -> Set Int -> ReceiverReference -> Labels -> Labels -> List GettableAlert -> Int -> Bool -> Html Msg
